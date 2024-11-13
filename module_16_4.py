@@ -11,11 +11,6 @@ class User(BaseModel):
     username: str
     age: int
 
-    # def __init__(self, user_id, username, age):
-    #     self.user_id = user_id
-    #     self.username = username
-    #     self.age = age
-
 @app.get("/users")
 async def get_userlist() -> List[User]:
     return users
@@ -23,7 +18,7 @@ async def get_userlist() -> List[User]:
 @app.post('/user/{username}/{age}')
 async def add_user(username: Annotated[str, Path(min_length=5, max_length=20, description='Enter username', example='UrbanUser')],
                    age: Annotated[int, Path(ge=18, le=120, description='Enter age', example='24')]) -> User:
-    user_id = len(users) #50:30
+    user_id = max(users) + 1
     user = User(id=user_id,username=username,age=age)
     users.append(user)
     return user
